@@ -36,7 +36,7 @@ void printArray(struct array *parr)
 
 void getArray(struct array *parr)
 {
-    
+    0
 }
 
 void arrayCommon(struct array *arrIn1, struct array *arrIn2, struct array *arrOut)
