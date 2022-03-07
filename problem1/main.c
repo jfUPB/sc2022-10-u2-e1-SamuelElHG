@@ -34,26 +34,27 @@ void printArray(struct array *parr)
     printf("\n");
 }
 
-void getArray(struct array *parr)
+void getArray(struct array *parr) //Lo primero que debemos hacer es dar las longitudes de los arreglos, primero del arreglo 1, luego sus datos, luego 
+                                //repetimos con el arreglo 2
 {
     
-char entry[16];
-    char entry2[16];
+char valor1[16];
+    char valor2[16];
 
-    if(fgets(entry, 5, stdin) != NULL)
+    if(fgets(valor1, 5, stdin) != NULL)
     {
-        entry[strlen(entry) -1 ] = 0;
+        valor1[strlen(valor1) -1 ] = 0;
 
-        int cambio = sscanf(entry,"%d",&parr->size);
+        int cambio = sscanf(valor1,"%d",&parr->size);
 
 
         parr->pdata = malloc(sizeof(int)*parr->size);
 
 
         for(int i = 0;i<parr->size;i++){
-            if(fgets(entry2, 5, stdin) != NULL)
+            if(fgets(valor2, 5, stdin) != NULL)
             {
-                int cambio2 = sscanf(entry2,"%d",parr->pdata + i);
+                int cambio2 = sscanf(valor2,"%d",parr->pdata + i);
             }
         }
     }
@@ -63,23 +64,23 @@ char entry[16];
 void arrayCommon(struct array *arrIn1, struct array *arrIn2, struct array *arrOut)
 {
  int size;
-    arrOut->size = 0;
-
+    arrOut->size = 0;                       //aquì viene crear el arreglo de salida, que no sabemos que tamaño tiene,
+                                            //lo que sì sabemos es que su largo no puede ser mayor al arreglo de entrada màs corto.
+                                            //os comparamos y colocamos en la variable size el valor del tamaño del arreglo màs corto
     if(arrIn1->size>arrIn2->size)
+    {
+        size = arrIn2->size;
+    }
+    else if(arrIn2->size>=arrIn1->size)
     {
         size = arrIn1->size;
     }
-    else if(arrIn2->size>arrIn1->size)
-    {
-        size = arrIn2->size;
-    }
-    else if (arrIn2->size == arrIn1->size)
-    {
-        size = arrIn2->size;
-    }
+
     
 
-    int iguales[size];
+    int iguales[size];                      //ya que si un valor no es inicializado en este lenguaje, toma valores aleatorios, inicializamos todos
+                                            //los valores del vector que usaremos para guardar los nùmeros iguales en -1
+                                            //ya que los inputs seràn solo valores enteros positivos
     for (int i = 0; i < size; i++){
         iguales[i]=-1;
     }
@@ -89,8 +90,10 @@ void arrayCommon(struct array *arrIn1, struct array *arrIn2, struct array *arrOu
     int contador=0;
 
     for(int i=0; i<arrIn1->size;i++){
-        for(int j=0; j<arrIn2->size;j++){
-            if(arrIn1->pdata[i]==arrIn2->pdata[j]) //Se leen todos elementos del arreglo 1 y se comparan con cada elemento del arrelgo 2, si se encuentra el mismo dato contador++ y se lanza el dato a arreglo3
+        for(int j=0; j<arrIn2->size;j++){               //aquì llega la comparaciòn, recorremos los arreglos con un ciclo for doble, y comparamos los valores
+                                                        //si la comparaciòn de valores da igual, el valor de cualquiera de los 2 arreglos se guarda en el 
+                                                        //arreglo
+            if(arrIn1->pdata[i]==arrIn2->pdata[j]) 
             {
                 int boolean = 0;
                 for (int k = 0; k < size; k++){
@@ -103,7 +106,7 @@ void arrayCommon(struct array *arrIn1, struct array *arrIn2, struct array *arrOu
                 if (boolean == 0)
                 {
                     iguales[contador] = arrIn2->pdata[j];
-                    contador++;
+                    contador++;                             //aquì el arreglo de salida va aumentando su tamaño cada vez que hay un valor igual
                     arrOut->size ++;
                 }
             }
@@ -114,7 +117,9 @@ void arrayCommon(struct array *arrIn1, struct array *arrIn2, struct array *arrOu
 
     for (int i = 0; i < arrOut->size; i++)
     {
-        *(arrOut->pdata+i) = iguales[i];
+        *(arrOut->pdata+i) = iguales[i];                //le damos los valores del vector que guardaba los iguales al vector de salida
+                                                        //no corremos el riesgo de pasarnos ya que el contador llegarà hasta el valor del tamaño del arreglo de salida
+                                                        //que fue subiendo segùn tenìamos valores iguales en el ciclo de màs arriba
     }
 }
 
